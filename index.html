@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แชร์โปรโมชั่นพิเศษ</title>
+
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:#000;
+  font-family:sans-serif;
+  color:#fff;
+}
+.card{
+  width:94%;
+  max-width:420px;
+  text-align:center;
+}
+.card img{
+  width:100%;
+  border-radius:16px;
+  box-shadow:0 0 25px rgba(0,255,255,.5);
+}
+.caption{
+  margin:14px 0;
+  font-size:16px;
+  opacity:.9;
+}
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:50px;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  background:linear-gradient(135deg,#00ff99,#00ffff);
+  color:#000;
+}
+.status{
+  margin-top:10px;
+  font-size:14px;
+}
+</style>
+</head>
+
+<body>
+<div class="card">
+  <img src="https://img2.pic.in.th/b74667a3-0ac6-4fe3-ac82-f05703ca1bb2.jpg">
+  <div class="caption">
+    โปรโมชั่นพิเศษเฉพาะวันนี้ 🔥 กดแชร์เพื่อรับสิทธิ์ทันที
+  </div>
+  <button onclick="shareFlex()">📤 กดแชร์ไป LINE</button>
+  <div class="status" id="status">กำลังตรวจสอบ...</div>
+</div>
+
+<script>
+const liffId = "2009033240-CysxfEv8";
+
+async function initLiff(){
+  try{
+    await liff.init({ liffId });
+
+    if(!liff.isInClient()){
+      document.getElementById("status").innerText =
+        "❌ กรุณาเปิดผ่านแอป LINE";
+      return;
+    }
+
+    if(!liff.isLoggedIn()){
+      liff.login();
+      return;
+    }
+
+    document.getElementById("status").innerText = "✅ พร้อมแชร์แล้ว";
+  }catch(e){
+    document.getElementById("status").innerText = "LIFF Error";
+  }
+}
+
+async function shareFlex(){
+  try{
+    await liff.shareTargetPicker([{
+      type:"flex",
+      altText:"โปรพิเศษวันนี้",
+      contents:{
+        type:"bubble",
+        size:"giga",  // ✅ เต็มจอแบบ OA
+
+        hero:{
+          type:"image",
+          url:"https://img2.pic.in.th/b74667a3-0ac6-4fe3-ac82-f05703ca1bb2.jpg",
+          size:"full",
+          aspectRatio:"1:1",
+          aspectMode:"cover"
+        },
+
+        body:{
+          type:"box",
+          layout:"vertical",
+          spacing:"sm",
+          contents:[
+            {
+              type:"text",
+              text:"🔥 โปรโมชั่นพิเศษวันนี้",
+              weight:"bold",
+              size:"lg",
+              color:"#ffcc00"
+            },
+            {
+              type:"text",
+              text:"สิทธิ์มีจำนวนจำกัด รีบกดรับก่อนหมดเวลา",
+              wrap:true,
+              size:"sm",
+              color:"#ffffff"
+            }
+          ]
+        },
+
+        footer:{
+          type:"box",
+          layout:"vertical",
+          spacing:"sm",
+          contents:[
+            {
+              type:"button",
+              style:"primary",
+              action:{
+                type:"uri",
+                label:"🎯 รับสิทธิ์ทันที",
+                uri:"https://24hrpung.carrd.co"
+              }
+            }
+          ]
+        }
+      }
+    }]);
+
+    document.getElementById("status").innerText = "✅ แชร์สำเร็จ";
+  }catch(e){
+    document.getElementById("status").innerText = "❌ ยกเลิกการแชร์";
+  }
+}
+
+initLiff();
+</script>
+</body>
+</html>
